@@ -70,8 +70,9 @@ public class Day02 {
     }
 
     int k = 0;
-    while (k < curLine.size() - 1) {
+    while (k < curLine.size()) {
       List<Integer> tmpLine = new ArrayList<>(curLine);
+      // System.out.println("Removing element at index " + k + " from the list: " + tmpLine);
       tmpLine.remove(k);
       // System.out.println(tmpLine);
 
