@@ -7,7 +7,8 @@ import java.util.*;  // Bad practice but just import everything for the purposes
 //NOTE: Change class name 
 public class Template {
   public static void main(String[] args) throws IOException {
-    FileReader in = new FileReader("./Inputs/file.txt")
+    // Note: Change input file name
+    FileReader in = new FileReader("./Inputs/file.txt");
     BufferedReader br = new BufferedReader(in);
     PrintWriter pw = new PrintWriter(System.out);
 
