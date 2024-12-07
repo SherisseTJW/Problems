@@ -53,7 +53,7 @@ public class Day04 {
       String curLine = String.join("", grid.get(i));
       Matcher forwardsMatch = forwards.matcher(curLine);
       Matcher backwardsMatch = backwards.matcher(curLine);
-      //
+
       // long numForwards = forwardsMatch.results().count();
       // long numBackwards = backwardsMatch.results().count();
 
@@ -68,10 +68,46 @@ public class Day04 {
     //
     // Part 2
     //
-    // pw.println("Part 2 Answer: " + part2);
+    // Ignore all corner row and columns
+    count = 0;
+    for (int i = 1; i < height - 1; i++) {
+      for (int j = 1; j < width - 1; j++) {
+        if (grid.get(i).get(j).equals("A") && Day04.isMAS_X(grid, i, j)) {
+          count++;
+        }
+      }
+    }
+    pw.println("Part 2 Answer: " + count);
 
     br.close();
     pw.close();
+  }
+
+  public static Boolean isMAS_X(List<List<String>> grid, int j, int i) {
+    int curCount = 0;
+
+    String leftUpDiag = grid.get(j-1).get(i-1);
+    String rightUpDiag = grid.get(j-1).get(i+1);
+    String leftDownDiag = grid.get(j+1).get(i-1);
+    String rightDownDiag = grid.get(j+1).get(i+1);
+
+    if (leftUpDiag.equals("M") && rightDownDiag.equals("S")) {
+      curCount++;
+    }
+
+    if (leftUpDiag.equals("S") && rightDownDiag.equals("M")) {
+      curCount++;
+    }
+
+    if (leftDownDiag.equals("M") && rightUpDiag.equals("S")) {
+      curCount++;
+    }
+
+    if (leftDownDiag.equals("S") && rightUpDiag.equals("M")) {
+      curCount++;
+    }
+
+    return curCount == 2;
   }
 
   public static int countXMAS(List<List<String>> grid, int j, int i, int height, int width) {
@@ -81,8 +117,6 @@ public class Day04 {
 
     // Upwards is good
     if (j >= 3) {
-
-      // System.out.println("Upwards is good");
 
       if (grid.get(j-1).get(i).equals("M") && grid.get(j-2).get(i).equals("A") && grid.get(j-3).get(i).equals("S")) {
         curCount++;
@@ -110,12 +144,6 @@ public class Day04 {
 
     // Downwards is good
     if (j < height - 3) {
-
-      // System.out.println("Downwards is good");
-      //
-      // System.out.println(grid.get(j+1).get(i).equals("M"));
-      // System.out.println(grid.get(j+2).get(i).equals("A"));
-      // System.out.println(grid.get(j+3).get(i).equals("S"));
 
       if (grid.get(j+1).get(i).equals("M") && grid.get(j+2).get(i).equals("A") && grid.get(j+3).get(i).equals("S")) {
         curCount++;
