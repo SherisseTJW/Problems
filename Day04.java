@@ -34,7 +34,7 @@ public class Day04 {
 
 
     Pattern forwards = Pattern.compile("XMAS");
-    Pattern backwards = Pattern.compile("SMAX");
+    Pattern backwards = Pattern.compile("SAMX");
 
     
     int count = 0;
@@ -53,9 +53,15 @@ public class Day04 {
       String curLine = String.join("", grid.get(i));
       Matcher forwardsMatch = forwards.matcher(curLine);
       Matcher backwardsMatch = backwards.matcher(curLine);
+      //
+      // long numForwards = forwardsMatch.results().count();
+      // long numBackwards = backwardsMatch.results().count();
 
       count += forwardsMatch.results().count();
       count += backwardsMatch.results().count();
+
+      // System.out.println("Forwards Count for X at line: " + i + " is: " + numForwards);
+      // System.out.println("Backwards Count for X at line: " + i + " is: " + numBackwards);
     }
     
     pw.println("Part 1 Answer: " + count);
@@ -76,16 +82,16 @@ public class Day04 {
     // Upwards is good
     if (j >= 3) {
 
-      System.out.println("Upwards is good");
+      // System.out.println("Upwards is good");
 
-      if (grid.get(j-1).get(i).equals("M") && grid.get(j-2).get(i).equals("S") && grid.get(j-3).get(i).equals("S")) {
+      if (grid.get(j-1).get(i).equals("M") && grid.get(j-2).get(i).equals("A") && grid.get(j-3).get(i).equals("S")) {
         curCount++;
       }
 
       // Left diagonal
       if (i >= 3) {
 
-        if (grid.get(j-1).get(i-1).equals("M") && grid.get(j-2).get(i-2).equals("S") && grid.get(j-3).get(i-3).equals("S")) {
+        if (grid.get(j-1).get(i-1).equals("M") && grid.get(j-2).get(i-2).equals("A") && grid.get(j-3).get(i-3).equals("S")) {
           curCount++;
         }
 
@@ -94,7 +100,7 @@ public class Day04 {
       // right diagonal
       if (i < width - 3) {
 
-        if (grid.get(j-1).get(i+1).equals("M") && grid.get(j-2).get(i+2).equals("S") && grid.get(j-3).get(i+3).equals("S")) {
+        if (grid.get(j-1).get(i+1).equals("M") && grid.get(j-2).get(i+2).equals("A") && grid.get(j-3).get(i+3).equals("S")) {
           curCount++;
         }
 
@@ -105,20 +111,20 @@ public class Day04 {
     // Downwards is good
     if (j < height - 3) {
 
-      System.out.println("Downwards is good");
+      // System.out.println("Downwards is good");
+      //
+      // System.out.println(grid.get(j+1).get(i).equals("M"));
+      // System.out.println(grid.get(j+2).get(i).equals("A"));
+      // System.out.println(grid.get(j+3).get(i).equals("S"));
 
-      System.out.println(grid.get(j+1).get(i).equals("M"));
-      System.out.println(grid.get(j+2).get(i).equals("A"));
-      System.out.println(grid.get(j+3).get(i).equals("S"));
-
-      if (grid.get(j+1).get(i).equals("M") && grid.get(j+2).get(i).equals("S") && grid.get(j+3).get(i).equals("S")) {
+      if (grid.get(j+1).get(i).equals("M") && grid.get(j+2).get(i).equals("A") && grid.get(j+3).get(i).equals("S")) {
         curCount++;
       }
 
       // Left diagonal
       if (i >= 3) {
 
-        if (grid.get(j+1).get(i-1).equals("M") && grid.get(j+2).get(i-2).equals("S") && grid.get(j+3).get(i-3).equals("S")) {
+        if (grid.get(j+1).get(i-1).equals("M") && grid.get(j+2).get(i-2).equals("A") && grid.get(j+3).get(i-3).equals("S")) {
           curCount++;
         }
 
@@ -127,7 +133,7 @@ public class Day04 {
       // right diagonal
       if (i < width - 3) {
 
-        if (grid.get(j+1).get(i+1).equals("M") && grid.get(j+2).get(i+2).equals("S") && grid.get(j+3).get(i+3).equals("S")) {
+        if (grid.get(j+1).get(i+1).equals("M") && grid.get(j+2).get(i+2).equals("A") && grid.get(j+3).get(i+3).equals("S")) {
           curCount++;
         }
 
