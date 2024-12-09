@@ -68,20 +68,22 @@ public class Day06 {
       }
     }
 
-
     pw.println("Part 1 Answer: " + part1);
     //
     // Part 2
     //
-    // pw.println("Part 2 Answer: " + part2);
+    int part2 = 0;
+
+    HashMap<Coordinates, ArrayList<String>> visitedDirectionMap = new HashMap<>(); // Store the coordinates, then the direction that we hit that coordinate with previously
+    
+    // If we hit the same coordinates with the same direction, we are in a cycle
+    // Check for current obstacle placement until cycle or left map
+
+    pw.println("Part 2 Answer: " + part2);
 
     br.close();
     pw.close();
   }
-
-  // public static Boolean visited(Guard cur, ArrayList<List<Boolean>> visitedMap) {
-  //   return visitedMap.get(cur.y).get(cur.x));
-  // }
 
   public static Boolean leavingMap(Guard cur, int height, int width) {
     if (cur.direction.equals("^") && cur.y <= 0) {
@@ -98,6 +100,31 @@ public class Day06 {
 
     if (cur.direction.equals("<") && cur.x <= 0) {
       return true;
+    }
+
+    return false;
+  }
+
+  public static Boolean isCycle(Guard cur, ) {
+    return false;
+  }
+}
+
+class Coordinates {
+  int x;
+  int y;
+
+  public Coordinates(int x, int y) {
+    this.x = x;
+    this.y = y;
+  }
+
+  @Override
+  public static boolean equals(Object other) {
+    if (other instanceof Coordinates) {
+      if (other.x == this.x && other.y == this.y) {
+        return true;
+      }
     }
 
     return false;
@@ -173,7 +200,6 @@ class Guard {
     return "Guard is at (" + this.x + ", " + this.y + "), facing " + this.direction;
   }
 }
-
 
 // NOTE: Uncomment and replace 'Something' and 'field', as well as adding other fields, as required
 // class Something implements Comparable<Something> {
