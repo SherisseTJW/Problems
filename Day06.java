@@ -14,8 +14,7 @@ public class Day06 {
     PrintWriter pw = new PrintWriter(System.out);
 
     ArrayList<List<String>> map = new ArrayList<>();
-    Guard guard = new Guard(-1, -1, "");
-
+    Guard originalPos = new Guard(-1, -1, "");
 
     String line;
     int y = 0;
@@ -29,11 +28,12 @@ public class Day06 {
 
       int guardIdx = tmp.indexOf("^"); // I checked the input starts with ^
       if (guardIdx >= 0) {
-        guard = new Guard(guardIdx, y, "^");
+        originalPos = new Guard(guardIdx, y, "^");
       }
 
       y++;
     }
+
 
     // pw.println(map);
     // pw.println(guardPos);
@@ -41,7 +41,6 @@ public class Day06 {
     //
     // Part 1
     //
-    int part1 = 0;
     int height = map.size();
     int width = map.get(0).size();
 
@@ -51,14 +50,19 @@ public class Day06 {
       Arrays.fill(visited[i], Boolean.FALSE);
     }
 
+    ArrayList<Coordinates> originalPath = new ArrayList<>();
+
     // pw.println(guard);
+
+    Guard guard = new Guard(originalPos.x, originalPos.y, "^");
 
     while (true) {
       guard = guard.step(map);
 
       if (!visited[guard.y][guard.x]) {
         visited[guard.y][guard.x] = true;
-        part1++;
+
+        originalPath.add(new Coordinates(guard.x, guard.y));
       }
 
     // pw.println(guard);
@@ -68,16 +72,58 @@ public class Day06 {
       }
     }
 
-    pw.println("Part 1 Answer: " + part1);
+    pw.println("Part 1 Answer: " + originalPath.size());
     //
     // Part 2
     //
     int part2 = 0;
 
-    HashMap<Coordinates, ArrayList<String>> visitedDirectionMap = new HashMap<>(); // Store the coordinates, then the direction that we hit that coordinate with previously
-    
-    // If we hit the same coordinates with the same direction, we are in a cycle
-    // Check for current obstacle placement until cycle or left map
+    for (int i = 0; i < originalPath.size(); i++) {
+      HashMap<Coordinates, ArrayList<String>> visitedDirectionMap = new HashMap<>(); // Store the coordinates, then the direction that we hit that coordinate with previously
+
+      Coordinates cur = originalPath.get(i);
+      ArrayList<List<String>> tmpMap = new ArrayList<>(map);
+      tmpMap.get(cur.y).set(cur.x, "#");
+
+      Guard simGuard = new Guard(originalPos.x, originalPos.y, "^");
+
+      pw.println("Checking Coordinates: " + cur);
+
+
+      // Check for current obstacle placement until cycle or left map
+      while (true) {
+        simGuard = simGuard.step(tmpMap);
+
+        Coordinates curCoords = new Coordinates(simGuard.x, simGuard.y);
+
+        // Cycle detection
+        // If we hit the same coordinates with the same direction, we are in a cycle
+        if (visitedDirectionMap.containsKey(curCoords)) {
+          ArrayList<String> directions = visitedDirectionMap.get(curCoords);
+
+          if (directions.contains(simGuard.direction)) {
+            pw.println("Possible position found at: " + cur);
+            part2++;
+            break;
+          }
+          else {
+            directions.add(simGuard.direction);
+            visitedDirectionMap.put(curCoords, directions);
+
+          }
+        }
+        else {
+          ArrayList<String> init = new ArrayList<>();
+          init.add(simGuard.direction);
+          visitedDirectionMap.put(curCoords, init);
+
+        }
+
+        if (leavingMap(simGuard, height, width)) {
+          break;
+        }
+      }
+    }
 
     pw.println("Part 2 Answer: " + part2);
 
@@ -104,10 +150,6 @@ public class Day06 {
 
     return false;
   }
-
-  public static Boolean isCycle(Guard cur, ) {
-    return false;
-  }
 }
 
 class Coordinates {
@@ -120,14 +162,20 @@ class Coordinates {
   }
 
   @Override
-  public static boolean equals(Object other) {
-    if (other instanceof Coordinates) {
+  public boolean equals(Object object) {
+    if (object instanceof Coordinates) {
+      Coordinates other = (Coordinates) object;
       if (other.x == this.x && other.y == this.y) {
         return true;
       }
     }
 
     return false;
+  }
+
+  @Override
+  public String toString() {
+    return "(" + x + ", " + y + ")";
   }
 }
 
