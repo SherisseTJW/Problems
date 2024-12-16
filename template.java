@@ -13,13 +13,13 @@ public class Template {
     BufferedReader br = new BufferedReader(in);
     PrintWriter pw = new PrintWriter(System.out);
 
-    // String line;
-    // while ((line = br.readLine()) != null) {
-    //  // NOTE: Copy and Uncomment the one(s) that are required
-    //  // int input = Integer.parseInt(line);
-    //  // String[] input = line.split(" ");
-    //  // int N = Integer.parseInt(input[0]);
-    // }
+    String line;
+    while ((line = br.readLine()) != null) {
+      // NOTE: Copy and Uncomment the one(s) that are required
+      // int input = Integer.parseInt(line);
+      // String[] input = line.split(" ");
+      // int N = Integer.parseInt(input[0]);
+    }
     //
     // Part 1
     //

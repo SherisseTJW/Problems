@@ -78,6 +78,11 @@ public class Day06 {
     //
     int part2 = 0;
 
+    // originalPath.clear();
+    // originalPath.add(new Coordinates(1, 7));
+
+    // pw.println(originalPath);
+
     for (int i = 0; i < originalPath.size(); i++) {
       HashMap<Coordinates, ArrayList<String>> visitedDirectionMap = new HashMap<>(); // Store the coordinates, then the direction that we hit that coordinate with previously
 
@@ -87,7 +92,7 @@ public class Day06 {
 
       Guard simGuard = new Guard(originalPos.x, originalPos.y, "^");
 
-      pw.println("Checking Coordinates: " + cur);
+      // pw.println("Checking Coordinates: " + cur);
 
 
       // Check for current obstacle placement until cycle or left map
@@ -102,7 +107,6 @@ public class Day06 {
           ArrayList<String> directions = visitedDirectionMap.get(curCoords);
 
           if (directions.contains(simGuard.direction)) {
-            pw.println("Possible position found at: " + cur);
             part2++;
             break;
           }
