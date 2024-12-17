@@ -39,26 +39,10 @@ public class Day07 {
     long part1 = 0;
 
     for (long target : inputMap.keySet()) {
-      int latest = -1; // 1 for multiply, 0 for add
       long curTarget = target;
       List<Long> reversedVarList = inputMap.get(target);
 
-      for (long cur : reversedVarList) {
-        // pw.println(curTarget);
-
-        if (canMultiply(curTarget, cur)) {
-          // pw.println("Dividing current target");
-          curTarget = curTarget / cur;
-          latest = 1;
-        }
-        else {
-          // pw.println("Subtracting current target");
-          curTarget = curTarget - cur;
-          latest = 0;
-        }
-      }
-
-      if (curTarget == latest) {
+      if (isValid(target, reversedVarList)) {
         part1 += target;
       }
     }
@@ -71,6 +55,38 @@ public class Day07 {
 
     br.close();
     pw.close();
+  }
+
+  public static Boolean isValid(long curTarget, List<Long> reversedVarList) {
+    int latest = -1; // 1 for multiply, 0 for add
+
+    for (int i = 0; i < reversedVarList.size(); i++) {
+      long cur = reversedVarList.get(i);
+      // pw.println(curTarget);
+
+      if (canMultiply(curTarget, cur)) {
+        // pw.println("Dividing current target");
+
+        // Check if the addition route also works
+        if (isValid(curTarget, reversedVarList.subList(0, i))) {
+          return true;
+        }
+
+        curTarget = curTarget / cur;
+        latest = 1;
+      }
+      else {
+        // pw.println("Subtracting current target");
+        curTarget = curTarget - cur;
+        latest = 0;
+      }
+    }
+
+    if (curTarget == latest) {
+      return true;
+    }
+
+    return false;
   }
 
   public static Boolean canMultiply(long curTarget, long val) {
