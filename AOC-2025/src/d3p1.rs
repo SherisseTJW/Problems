@@ -17,30 +17,38 @@ fn main() {
 
     let mut sum: i64 = 0;
     for bank in bank_arr {
-        let mut result: Vec<i64> = vec![];
+        let mut fst: i64 = 0;
+        let mut snd: i64 = 0;
 
         let mut batteries = bank.chars();
         for i in 0..bank.len() {
             let battery = batteries.next().unwrap();
             let joltage = battery.to_digit(10).unwrap() as i64;
 
-            if result.len() < 12 {
-                result.push(joltage);
+            if i == bank.len() - 1 {
+                if joltage > snd {
+                    snd = joltage;
+                    continue;
+                }
+
                 continue;
             }
 
-            // Two possibilities:
-            // 1. this number should be in the middle
-            // 1.5. if there are more numbers behind AND this number is greater than its
-            //   predecessor(s)
-            // 2. this number should be at the end
+            if joltage > fst {
+                fst = joltage;
+                snd = 0;
+                continue;
+            }
 
-            loop {
-                if joltage > result.last().unwrap() {
-                    result.pop();
-                }
+            if joltage > snd {
+                snd = joltage;
+                continue;
             }
         }
+
+        let res: i64 = format!("{}{}", fst.to_string(), snd.to_string()).parse::<i64>().unwrap();
+        println!("Adding {} to sum", res);
+        sum += res;
     }
 
     println!("{}", sum);
