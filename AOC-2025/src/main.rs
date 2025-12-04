@@ -1,6 +1,11 @@
 use std::env;
 use std::fs;
 
+fn collect_to_u64(vec: &Vec<u64>) -> u64 {
+    let result: String = vec.into_iter().map(|x| x.to_string()).take(12).collect();
+    result.parse::<u64>().unwrap()
+}
+
 fn main() {
     let args: Vec<String> = env::args().collect();
 
@@ -15,32 +20,31 @@ fn main() {
     // NOTE: Logic below
     let bank_arr = contents.trim().split("\n");
 
-    let mut sum: i64 = 0;
+    let mut sum: u64 = 0;
+    let num_digits: usize = 12;
+
     for bank in bank_arr {
-        let mut result: Vec<i64> = vec![];
-
+        let mut result: Vec<u64> = Vec::with_capacity(num_digits);
         let mut batteries = bank.chars();
-        for i in 0..bank.len() {
+
+        let mut max_pops = bank.len() - num_digits;
+        for _ in 0..bank.len() {
             let battery = batteries.next().unwrap();
-            let joltage = battery.to_digit(10).unwrap() as i64;
+            let joltage = battery.to_digit(10).unwrap() as u64;
 
-            if result.len() < 12 {
-                result.push(joltage);
-                continue;
-            }
-
-            // Two possibilities:
-            // 1. this number should be in the middle
-            // 1.5. if there are more numbers behind AND this number is greater than its
-            //   predecessor(s)
-            // 2. this number should be at the end
-
-            loop {
-                if joltage > result.last().unwrap() {
-                    result.pop();
+            while let Some(&last) = result.last() {
+                if joltage > last && max_pops > 0 {
+                    max_pops -= 1;
+                }
+                else {
+                    break;
                 }
             }
+
+            result.push(joltage);
         }
+
+        sum += collect_to_u64(&result);
     }
 
     println!("{}", sum);
