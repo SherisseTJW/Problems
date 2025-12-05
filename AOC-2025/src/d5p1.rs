@@ -64,10 +64,18 @@ fn main() {
         }
     }
 
-    let mut num_fresh_ids = 0;
-    for interval in &intervals {
-        num_fresh_ids += interval.end - interval.start + 1;
+    // for interval in &intervals {
+    //     println!("Interval: {} to {}", interval.start, interval.end);
+    // }
+
+    let mut fresh_count = 0;
+    for id in ingredient_ids {
+        for interval in &intervals {
+            if id <= interval.end && id >= interval.start {
+                fresh_count += 1;
+            }
+        }
     }
 
-    println!("Num Fresh Ids: {}", num_fresh_ids);
+    println!("Fresh count: {}", fresh_count);
 }
