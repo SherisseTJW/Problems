@@ -16,9 +16,10 @@ fn main() {
 
     // NOTE: Logic below
     let mut eqns: Vec<Vec<String>> = vec![];
+    // let mut eqns: HashMap<i64, Vec<String>> = HashMap::new();
 
     for line in contents.lines() {
-        let cur = line.split(" ");
+        let cur = line.trim().split(" ");
 
         let mut line_vec: Vec<String> = vec![];
         let mut num_words = 0;
@@ -28,7 +29,7 @@ fn main() {
                 continue;
             }
 
-            line_vec.push(word.to_string());
+            line_vec.push(word.trim().to_string());
             num_words += 1;
         }
 
@@ -40,12 +41,16 @@ fn main() {
     }
 
     for line in contents.lines() {
-        let cur = line.split(" ");
+        let cur = line.trim().split(" ");
 
         let mut line_vec: Vec<String> = vec![];
 
         for word in cur {
-            line_vec.push(word.to_string());
+            if word == "" {
+                continue;
+            }
+
+            line_vec.push(word.trim().to_string());
         }
 
         let num_words = line_vec.len();
@@ -55,37 +60,37 @@ fn main() {
     }
 
     // NOTE: Just checking parsing is correct
-    let num_lines = eqns.len(); 
-    for i in 0..num_lines {
-        let num_words = eqns[i].len();
-        for j in 0..num_words {
-            println!("{}", eqns[i][j]);
+    // let num_lines = eqns.len(); 
+    // for i in 0..num_lines {
+    //     let num_words = eqns[i].len();
+    //     for j in 0..num_words {
+    //         println!("{}", eqns[i][j]);
+    //     }
+    //
+    //     println!("");
+    // }
+
+    let mut sum = 0;
+    for eqn in eqns {
+        let op = eqn.last().unwrap();
+
+        let mut result = 0;
+        if op == "*" {
+            result = 1;
+        }
+        
+        for i in 0..(eqn.len() - 1) {
+            if op == "+" {
+                result += eqn[i].parse::<i64>().unwrap();
+            }
+
+            if op == "*" {
+                result *= eqn[i].parse::<i64>().unwrap();
+            }
         }
 
-        println!("");
+        sum += result;
     }
 
-    // let mut sum = 0;
-    // for eqn in eqns {
-    //     let op = eqn.last().unwrap();
-    //
-    //     let mut result = 0;
-    //     if op == "*" {
-    //         result = 1;
-    //     }
-    //
-    //     for i in 0..(eqn.len() - 1) {
-    //         if op == "+" {
-    //             result += eqn[i].parse::<i64>().unwrap();
-    //         }
-    //
-    //         if op == "*" {
-    //             result *= eqn[i].parse::<i64>().unwrap();
-    //         }
-    //     }
-    //
-    //     sum += result;
-    // }
-    //
-    // println!("{}", sum);
+    println!("{}", sum);
 }
