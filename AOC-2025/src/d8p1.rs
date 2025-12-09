@@ -64,9 +64,6 @@ struct Edge {
     u: i64,
     v: i64,
     w: f64,
-
-    ux: i64,
-    vx: i64,
 }
 
 fn main() {
@@ -103,17 +100,12 @@ fn main() {
             let v = nodes[j];
             let w = (((u.x - v.x).pow(2) + (u.y - v.y).pow(2) + (u.z - v.z).pow(2)) as f64).sqrt();
 
-            let ux = u.x;
-            let vx = v.x;
-
-            // NOTE: Theorectically should be bidrectional but whenever we take, we union
-            // Since based on num edges we go through, don't add the other edge
+                // NOTE: Theorectically should be bidrectional but whenever we take, we union
+                // Since based on num edges we go through, don't add the other edge
             edges.push(Edge {
                 u: u.id,
                 v: v.id,
                 w,
-                ux,
-                vx,
             });
         }
     }
@@ -133,25 +125,46 @@ fn main() {
         num_sets: num_nodes as i64,
     };
 
-    let mut i = 0;
-    let mut edge1 = 0;
-    let mut edge2 = 0;
-    loop {
+    let max_connections = 1000;
+
+    for i in 0..max_connections {
         let edge = &edges[i];
         if !ufds.is_same_set(edge.u, edge.v) {
             ufds.union(edge.u, edge.v);
+        }
+    }
 
-            edge1 = edge.ux;
-            edge2 = edge.vx;
+    println!("Num disjoint sets: {}", ufds.num_sets);
 
-            if ufds.num_sets == 1 {
+    let mut disjoint_sets: Vec<i64> = vec![-1; 3];
+    let mut largest_three: Vec<i64> = vec![-1; 3];
+    for i in 0..num_nodes {
+        let idx = i as i64;
+        let size = ufds.size_of_set(idx);
+        let root = ufds.find(idx);
+
+        for j in 0..3 {
+            if !disjoint_sets.contains(&root) {
+                if size <= largest_three[j] {
+                    continue;
+                }
+
+                largest_three[j] = size;
+                disjoint_sets[j] = root;
                 break;
             }
         }
-
-        i += 1;
     }
 
-    let result = edge1 * edge2;
+    let mut result = 1;
+    for size in largest_three {
+        if size <= 0 {
+            continue;
+        }
+
+        println!("{}", size);
+        result *= size;
+    }
+
     println!("{}", result);
 }
