@@ -19,6 +19,7 @@ fn main() {
     let mut al: HashMap<String, Vec<String>> = HashMap::new();
     
     for line in contents.lines() {
+        println!("{}", line);
         let mut tmp = line.split(": ");
         let u = tmp.next().unwrap().to_string();
 
@@ -34,39 +35,21 @@ fn main() {
         // }
     }
 
-    // al.insert("out".to_string(), vec![]);
+    al.insert("out".to_string(), vec![]);
 
-    let mut stack: VecDeque<(String, bool, bool)> = VecDeque::new();
-    stack.push_back(("svr".to_string(), false, false));
+    let mut stack: VecDeque<String> = VecDeque::new();
+    stack.push_back("you".to_string());
 
     let goal = "out".to_string();
-
-    let dac_goal = "dac".to_string();
-    let fft_goal = "fft".to_string();
-    while let Some((u, dac, fft)) = stack.pop_back() {
+    while let Some(u) = stack.pop_back() {
         if u == goal {
-            if dac && fft {
-                num_paths += 1;
-            }
-
-            continue;
+            num_paths += 1;
         }
 
         let outputs = al.get(&u).unwrap();
 
-        let mut new_dac = dac.clone();
-        let mut new_fft = fft.clone();
-
-        if u == dac_goal {
-            new_dac = true;
-        }
-        if u == fft_goal {
-            new_fft = true;
-        }
-
-
         for out in outputs {
-            stack.push_back((out.clone(), new_dac, new_fft));
+            stack.push_back(out.clone());
         }
     }
 
